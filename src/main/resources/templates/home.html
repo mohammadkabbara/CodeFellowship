@@ -4,16 +4,19 @@
 <head>
     <meta charset="UTF-8" />
     <title>Title</title>
+    <link rel="stylesheet" href="home.css"/>
 </head>
 
 <body>
 <header>
-    <a href="http://localhost:8080/signup">Sing Up</a>
-    <a href="http://localhost:8080/login">Log in</a>
+    <div class="home">
+    <a th:href="@{/signup}">Sing Up</a>
+    <a  th:href="@{/login}">Log in</a>
     <a th:href="@{http://localhost:8080/profile(id=${user})}">Profile</a>
+    </div>
 </header>
 <main>
-    <h1>WELCOME TO CODE FELLOWS SHIP</h1>
+    <h1>WELCOME TO CODE FELLOWS</h1>
 </main>
 </body>
 
