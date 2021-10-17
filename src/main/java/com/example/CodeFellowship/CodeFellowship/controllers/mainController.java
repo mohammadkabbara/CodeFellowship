@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Optional;
 
 @Controller
-public class homeController {
+public class mainController {
 
     @Autowired
     ApplicationUserRepository applicationUserRepository;
@@ -31,6 +31,7 @@ public class homeController {
     public String profile(@RequestParam Integer id , Model model){
         Optional<ApplicationUser> user =  applicationUserRepository.findById(id);
         model.addAttribute("username", user.get().getUsername());
+//        model.addAttribute()
         model.addAttribute("firstName", user.get().getFirstName());
         model.addAttribute("lastName", user.get().getLastName());
         model.addAttribute("dateOfBirth", user.get().getDateOfBirth());
