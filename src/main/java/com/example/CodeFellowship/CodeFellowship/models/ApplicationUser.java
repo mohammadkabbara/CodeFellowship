@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "userdata")
@@ -21,6 +22,8 @@ public class ApplicationUser implements UserDetails {
     private String lastName;
     private String dateOfBirth;
     private String bio;
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList;
 
     public ApplicationUser(){}
     public ApplicationUser(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {
@@ -30,6 +33,8 @@ public class ApplicationUser implements UserDetails {
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.bio = bio;
+
+
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -107,6 +112,13 @@ public class ApplicationUser implements UserDetails {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
     }
 
 }

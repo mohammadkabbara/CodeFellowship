@@ -20,10 +20,8 @@ public class mainController {
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal ApplicationUser user , Model model){
-        if (user != null) {
             ApplicationUser currentUser = applicationUserRepository.findByUsername(user.getUsername());
             model.addAttribute("user", currentUser.getId());
-        }
         return "home.html";
     }
 
