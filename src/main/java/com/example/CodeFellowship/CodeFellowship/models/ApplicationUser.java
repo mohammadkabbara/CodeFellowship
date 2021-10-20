@@ -5,10 +5,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "userdata")
+//@Table(name = "userdata")
 public class ApplicationUser implements UserDetails {
 
 
@@ -22,8 +24,31 @@ public class ApplicationUser implements UserDetails {
     private String lastName;
     private String dateOfBirth;
     private String bio;
-    @OneToMany(mappedBy = "user")
-    private List<Post> postList;
+    @OneToMany(mappedBy = "applicationUser")
+    private List<Post> post;
+
+    //////////////////
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+
+    @JoinTable(name = "followersfollowingtable",
+
+            joinColumns = {
+            @JoinColumn(name="followerid")
+            },
+
+
+            inverseJoinColumns = {
+            @JoinColumn(name="followingid")
+    })
+
+
+    private Set<ApplicationUser> followers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "followers")
+    private Set <ApplicationUser> following = new HashSet<>();
+
+    ////////////////
 
     public ApplicationUser(){}
     public ApplicationUser(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {
@@ -36,6 +61,7 @@ public class ApplicationUser implements UserDetails {
 
 
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -113,12 +139,32 @@ public class ApplicationUser implements UserDetails {
     public void setBio(String bio) {
         this.bio = bio;
     }
-    public List<Post> getPostList() {
-        return postList;
+
+    ////////////////
+    public List<Post> getPost() {
+        return post;
     }
 
-    public void setPostList(List<Post> postList) {
-        this.postList = postList;
+    public void setPost(List<Post> post) {
+        this.post = post;
     }
 
+
+    public Set<ApplicationUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<ApplicationUser> followers) {
+        this.followers = followers;
+    }
+
+    public Set<ApplicationUser> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<ApplicationUser> following) {
+        this.following = following;
+    }
+    ////////////////
 }
+

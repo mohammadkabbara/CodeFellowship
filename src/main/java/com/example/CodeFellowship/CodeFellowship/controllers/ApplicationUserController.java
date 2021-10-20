@@ -1,40 +1,51 @@
 package com.example.CodeFellowship.CodeFellowship.controllers;
 
+//import com.example.demo.Models.ApplicationUser;
+//import com.example.demo.Repositorys.ApplicationUserRepository;
 import com.example.CodeFellowship.CodeFellowship.models.ApplicationUser;
 import com.example.CodeFellowship.CodeFellowship.repos.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
+
+
 @Controller
 public class ApplicationUserController {
-
     @Autowired
     ApplicationUserRepository applicationUserRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/signup")
-    public String getSignUp() {
+    public String getSignUpPage(){
         return "signup.html";
     }
 
-    @GetMapping("/login")
-    public String getSign() {
-        return "signin.html";
-    }
 
     @PostMapping("/signup")
-    public RedirectView signUp(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password,
-                               @RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName") String lastName,
-                               @RequestParam(value = "dateOfBirth") String dateOfBirth, @RequestParam(value = "bio") String bio) {
-        ApplicationUser newUser = new ApplicationUser(username, bCryptPasswordEncoder
-                .encode(password), firstName, lastName, dateOfBirth, bio);
-        applicationUserRepository.save(newUser);
-        return new RedirectView("/login");
+    public RedirectView addNewUser (@ModelAttribute ApplicationUser user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        applicationUserRepository.save(user);
+        return new RedirectView ("/login");
     }
+
+
+    @GetMapping("/login")
+    public String getLoginPage(Principal p, Model model){
+        try{
+            model.addAttribute("userData",p.getName());
+        }catch (NullPointerException e){
+            model.addAttribute("userData","");
+        }
+        return "login.html";
+    }
+
 }
